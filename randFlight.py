@@ -1,18 +1,39 @@
+# Flight Radar API import
+from flightradar24 import FlightRadar24API
+# Random import
+from random import randint
+# tkinter & customtkinter import
 import tkinter
 import tkinter.messagebox
 import customtkinter
 
+### FRAPI CONFIG ###
+# Alias of FlightRadar24API
+frapi=FlightRadar24API()
+
+# Random flight choice
+def randFlightChoice():
+    flightnb = randint(10,len(allflights))
+    return flightnb
+
+allflights = frapi.get_flights()
+flight = allflights[randint(10,len(allflights))]
+
+# Alias of get_flight_details
+flightdetail = frapi.get_flight_details(flight)
+
+### GUI SETUP ###
+# Default appearance setting
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
-
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
         # configure window
-        self.title("CustomTkinter complex_example.py")
-        self.geometry(f"{1100}x{580}")
+        self.title("Random Flight")
+        self.geometry(f"{800}x{400}")
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -36,11 +57,6 @@ class App(customtkinter.CTk):
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"],
                                                                        command=self.change_appearance_mode_event)
         self.appearance_mode_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 10))
-        self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
-        self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
-        self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"],
-                                                               command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
         # create main entry and button
         self.entry = customtkinter.CTkEntry(self, placeholder_text="CTkEntry")
@@ -132,8 +148,7 @@ class App(customtkinter.CTk):
         self.scrollable_frame_switches[0].select()
         self.scrollable_frame_switches[4].select()
         self.radio_button_3.configure(state="disabled")
-        self.appearance_mode_optionemenu.set("Dark")
-        self.scaling_optionemenu.set("100%")
+        self.appearance_mode_optionemenu.set("System")
         self.optionmenu_1.set("CTkOptionmenu")
         self.combobox_1.set("CTkComboBox")
         self.slider_1.configure(command=self.progressbar_2.set)
@@ -151,9 +166,6 @@ class App(customtkinter.CTk):
     def change_appearance_mode_event(self, new_appearance_mode: str):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-    def change_scaling_event(self, new_scaling: str):
-        new_scaling_float = int(new_scaling.replace("%", "")) / 100
-        customtkinter.set_widget_scaling(new_scaling_float)
 
     def sidebar_button_event(self):
         print("sidebar_button click")

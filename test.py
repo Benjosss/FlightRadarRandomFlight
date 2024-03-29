@@ -1,4 +1,4 @@
-from FlightRadar24 import FlightRadar24API
+from flightradar24 import FlightRadar24API
 from random import randint
 
 frapi=FlightRadar24API()
@@ -9,6 +9,7 @@ print(flight)
 
 
 flightdetail = frapi.get_flight_details(flight)
+
 
 # Flight
 callsign = flightdetail['identification']['callsign']
